@@ -19,7 +19,9 @@ func renderTemplate(w http.ResponseWriter, tmpl string, title string) {
 
 func mainHandler(w http.ResponseWriter, r *http.Request) {
     title := r.URL.Path[len("/"):]
+	renderTemplate(w, "header", title)
 	renderTemplate(w, "main", title)
+	renderTemplate(w, "footer", title)
 }
 
 func ajaxHandler(w http.ResponseWriter, r *http.Request) {
