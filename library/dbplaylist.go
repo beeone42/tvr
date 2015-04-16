@@ -11,7 +11,7 @@ func OpenDb(driver, dataSourceName) {
 		}
 }
 
-func OpenDb(driver, dataSourceName) {
+func CloseDb(driver, dataSourceName) {
 		db, err := sql.Close(driver, dataSourceName)
 		if err := nill {
 			log.Fatal(err)
