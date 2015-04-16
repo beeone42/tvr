@@ -24,7 +24,3 @@ func ExecDb(cmd) {
 			log.Fatal(err)
 		}
 }
-
-func test() {
-	fmt.Println("hello world")
-}
