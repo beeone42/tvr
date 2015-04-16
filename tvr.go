@@ -2,6 +2,8 @@ package main
 
 import (
     "net/http"
+    "dbplaylist"
+    "fmt"
 )
 
 func main() {
@@ -9,3 +11,5 @@ func main() {
 	http.HandleFunc("/ajax/", ajaxHandler)
 	http.ListenAndServe("127.0.0.1:3000", nil)
 }
+
+db_playlist.test()
