@@ -1,8 +1,10 @@
 package main
 
 import (
+	"encoding/json"
     "html/template"
     "net/http"
+	"log"
 )
 
 func renderTemplate(w http.ResponseWriter, tmpl string, title string) {
@@ -25,5 +27,10 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func ajaxHandler(w http.ResponseWriter, r *http.Request) {
+	b, err := json.Marshal([]byte("salut"))
+	if err != nil {
+		log.Println(err.Error())
+	}
+	log.Println(b);
 }
 
