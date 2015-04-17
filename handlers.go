@@ -26,7 +26,16 @@ func listPlaylist() ([]string, error) {
 		return nil, err
 	}
 	log.Println(res)
-	return []string{"game", "ducourant"}, err
+	//return []string{"game", "ducourant"}, nil
+
+	var ext string
+	for i := range res {
+		res[i] = path.Base(res[i])
+		ext = filepath.Ext(res[i])
+		res[i] = res[i][0:len(res[i]) - len(ext)]
+	}
+
+	return res, nil
 }
 
 func loadPlaylist(id string) (*Playlist, error) {
@@ -91,13 +100,16 @@ func ajaxHandler(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			b, err = json.Marshal(res)
+
 		} else {
+
 			res, err := loadPlaylist(m[2])
 			if err != nil {
 				log.Println(err.Error())
 				return
 			}
 			b, err = json.Marshal(res)
+
 		}
 		if err != nil {
 			log.Println(err.Error())
