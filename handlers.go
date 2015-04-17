@@ -6,6 +6,8 @@ import (
     "net/http"
 	"log"
 	"regexp"
+	"path"
+	"io/ioutil"
 )
 
 type Playlist struct {
@@ -15,6 +17,29 @@ type Playlist struct {
 }
 
 var ajaxValidPath = regexp.MustCompile("^/ajax/(load|save)/([a-zA-Z0-9]+)$")
+
+func loadPlaylist(id string) (*Playlist, error) {
+	var pl Playlist
+    filename := path.Join("playlist", id + ".json")
+    body, err := ioutil.ReadFile(filename)
+    if err != nil {
+        return nil, err
+    }
+	err = json.Unmarshal(body, &pl)
+    if err != nil {
+        return nil, err
+    }
+    return &pl, nil
+}
+
+func savePlaylist(pl Playlist) (error) {
+    filename := path.Join("playlist", pl.Id + ".json")
+	body, err := json.Marshal(pl)
+    if err != nil {
+        return err
+    }
+    return ioutil.WriteFile(filename, body, 0600)
+}
 
 func renderTemplate(w http.ResponseWriter, tmpl string, title string) {
     t, err := template.ParseFiles("views/" + tmpl + ".html")
@@ -43,7 +68,14 @@ func ajaxHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	pl := Playlist{m[2], "GoT", []string{"episode1.mp4", "episode2.mp4"}}
+	pl, err := loadPlaylist(m[2])
+	if err != nil {
+		log.Println(err.Error())
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+		return 
+	}
+
+	//Playlist{m[2], "GoT", []string{"episode1.mp4", "episode2.mp4"}}
 
 	b, err := json.Marshal(pl)
 	if err != nil {
