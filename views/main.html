@@ -6,20 +6,21 @@
         </div>
 </div>
 <br/>
+
 <script>
 $(function(){
 
     $.getJSON("/ajax/load/list").done(function(data){
-        alert(data);
+        //alert(data);
         for (tmp of data)
-            $('#lala').append('<option>' + tmp + '</option>');
+            $('#plist').append('<option>' + tmp + '</option>');
     });
 
 });
 </script>
 <div  style="inline-block; margin-right: auto; margin-left: auto;">
     <div>
-        <select id="lala" multiple="yes" style="width: 40%; position: fixed; left: 5%" size="10">
+        <select id="plist" multiple="yes" style="width: 40%; position: fixed; left: 5%" size="10">
 
         </select>
     </div>
