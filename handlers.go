@@ -7,6 +7,7 @@ import (
 	"log"
 	"regexp"
 	"path"
+	"path/filepath"
 	"io/ioutil"
 )
 
@@ -18,15 +19,27 @@ type Playlist struct {
 
 var ajaxValidPath = regexp.MustCompile("^/ajax/(load|save)/([a-zA-Z0-9]+)$")
 
+func listPlaylist() ([]string, error) {
+	res, err := filepath.Glob(path.Join("playlist", "*.json"))
+	if err != nil {
+		log.Println(err.Error())
+		return nil, err
+	}
+	log.Println(res)
+	return []string{"game", "ducourant"}, err
+}
+
 func loadPlaylist(id string) (*Playlist, error) {
 	var pl Playlist
     filename := path.Join("playlist", id + ".json")
     body, err := ioutil.ReadFile(filename)
     if err != nil {
+		log.Println(err.Error())
         return nil, err
     }
 	err = json.Unmarshal(body, &pl)
     if err != nil {
+		log.Println(err.Error())
         return nil, err
     }
     return &pl, nil
@@ -68,20 +81,36 @@ func ajaxHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	pl, err := loadPlaylist(m[2])
-	if err != nil {
-		log.Println(err.Error())
-        http.Error(w, err.Error(), http.StatusInternalServerError)
-		return 
+	if (m[1] == "load") {
+		var b []byte
+		var err error
+		if (m[2] == "list") {
+			res, err := listPlaylist()
+			if err != nil {
+				log.Println(err.Error())
+				return
+			}
+			b, err = json.Marshal(res)
+		} else {
+			res, err := loadPlaylist(m[2])
+			if err != nil {
+				log.Println(err.Error())
+				return
+			}
+			b, err = json.Marshal(res)
+		}
+		if err != nil {
+			log.Println(err.Error())
+			return
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(b)
+		return
 	}
-
-	//Playlist{m[2], "GoT", []string{"episode1.mp4", "episode2.mp4"}}
-
-	b, err := json.Marshal(pl)
-	if err != nil {
-		log.Println(err.Error())
+	if (m[1] == "save") {
+		//pl = Playlist{m[2], r.FormValue("title")
+		//err := savePlaylist(pl)
+		return
 	}
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(b)
 }
 
