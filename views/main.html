@@ -7,17 +7,20 @@
 </div>
 <br/>
 <script>
-    $(function() {
-        console.log( "document loaded" );
+$(function(){
+
+    $.getJSON("/ajax/load/list").done(function(data){
+        alert(data);
+        for (tmp of data)
+            $('#lala').append('<option>' + tmp + '</option>');
     });
+
+});
 </script>
 <div  style="inline-block; margin-right: auto; margin-left: auto;">
     <div>
-        <select multiple=yes style="width: 40%; position: fixed; left: 5%" size=10>
-        <option value="a">a</option>
-        <option value="b">b</option>
-        <option value="c">c</option>
-        <option value="d">d</option>
+        <select id="lala" multiple="yes" style="width: 40%; position: fixed; left: 5%" size="10">
+
         </select>
     </div>
     <div>
