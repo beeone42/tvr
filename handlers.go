@@ -9,6 +9,7 @@ import (
 	"path"
 	"path/filepath"
 	"io/ioutil"
+	"fmt"
 )
 
 type Playlist struct {
@@ -17,7 +18,29 @@ type Playlist struct {
 	Items []string
 }
 
+type Video struct {
+	Id string
+	Name string
+}
+
 var ajaxValidPath = regexp.MustCompile("^/ajax/(load|save)/([a-zA-Z0-9]+)$")
+
+func listVideo() ([]string, error) {
+	res, err := filepath.Glob(path.Join("video", "*.json"))
+	if err != nil {
+		log.Println(err.Error())
+		return nil, err
+	}
+	log.Println(res)
+
+	var ext string
+	for i := range res {
+		res[i] = path.Base(res[i])
+		ext = filepath.Ext(res[i])
+		res[i] = res[i][0:len(res[i]) - len(ext)]
+	}
+	return res, nil
+}
 
 func listPlaylist() ([]string, error) {
 	res, err := filepath.Glob(path.Join("playlist", "*.json"))
@@ -38,6 +61,22 @@ func listPlaylist() ([]string, error) {
 	return res, nil
 }
 
+func loadVideo(id string) (*Video, error) {
+	var pl Video
+    filename := path.Join("video", id + ".json")
+    body, err := ioutil.ReadFile(filename)
+    if err != nil {
+		log.Println(err.Error())
+        return nil, err
+    }
+	err = json.Unmarshal(body, &pl)
+    if err != nil {
+		log.Println(err.Error())
+        return nil, err
+    }
+    return &pl, nil
+}
+
 func loadPlaylist(id string) (*Playlist, error) {
 	var pl Playlist
     filename := path.Join("playlist", id + ".json")
@@ -53,6 +92,7 @@ func loadPlaylist(id string) (*Playlist, error) {
     }
     return &pl, nil
 }
+
 
 func savePlaylist(pl Playlist) (error) {
     filename := path.Join("playlist", pl.Id + ".json")
@@ -82,6 +122,13 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 	renderTemplate(w, "footer", title)
 }
 
+func videoHandler(w http.ResponseWriter, r *http.Request) {
+	title := r.URL.Path[len("/video"):]
+	renderTemplate(w, "header", title)
+	renderTemplate(w, "video", title)
+	renderTemplate(w, "footer", title)
+}
+
 func ajaxHandler(w http.ResponseWriter, r *http.Request) {
 
 	m := ajaxValidPath.FindStringSubmatch(r.URL.Path)
@@ -99,8 +146,8 @@ func ajaxHandler(w http.ResponseWriter, r *http.Request) {
 				log.Println(err.Error())
 				return
 			}
-			b, err = json.Marshal(res)
-
+		b, err = json.Marshal(res)
+/*
 		} else {
 
 			res, err := loadPlaylist(m[2])
@@ -109,8 +156,28 @@ func ajaxHandler(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			b, err = json.Marshal(res)
-
+*/
+		} else if (m[2] == "video") {
+			res, err := listVideo()
+			if err != nil {
+				log.Println(err.Error())
+				return
+			}
+			b, err = json.Marshal(res)
+		} else if (m[2] != "video" && m[2] != "list") {
+			errorHandler(w, r, http.StatusNotFound)
+        	return
 		}
+
+/*		} else {
+			res, err := loadPlaylist(m[2])
+			if err != nil {
+				log.Println(err.Error())
+				return
+			}
+			b, err = json.Marshal(res)
+		}
+*/
 		if err != nil {
 			log.Println(err.Error())
 			return
@@ -126,3 +193,9 @@ func ajaxHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func errorHandler(w http.ResponseWriter, r *http.Request, status int) {
+    w.WriteHeader(status)
+    if status == http.StatusNotFound {
+        fmt.Fprint(w, "custom 404")
+    }
+}

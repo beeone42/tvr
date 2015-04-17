@@ -6,6 +6,7 @@ import (
 
 func main() {
 	http.HandleFunc("/", mainHandler)
+	http.HandleFunc("/video", videoHandler)
 	http.HandleFunc("/ajax/", ajaxHandler)
 	http.ListenAndServe("127.0.0.1:3000", nil)
 }
