@@ -10,19 +10,36 @@ $(function(){
     });
 
 });
+$(function(){
+
+    $.getJSON("/ajax/load/list").done(function(data){
+        //alert(data);
+        for (tmp of data)
+            $('#plist').append('<option>' + tmp + '</option>');
+    });
+
+});
+
+$(document).on('change', "#plist", function(){
+    var end = this.value;
+ //  alert(end);
+    $('#lala').empty().append('<option>' + end + '</option>');
+});
+
+//$(function() {alert("test")});
 </script>
+<div style="position:relative">    
+    <select id="plist" onselect="tt()" class="form-control" style="width: 40%; position:absolute right:0">
+    </select>
+</div>
+<br/>
 <div  style="inline-block; margin-right: auto; margin-left: auto;">
     <div>
         <select id="video" multiple="yes" style="width: 40%; position: fixed; left: 5%" size="10">
-
         </select>
     </div>
     <div>
-        <select multiple=yes style="width: 40%; position: fixed; right: 5%" size=10>
-        <option value="a">a</option>
-        <option value="b">b</option>
-        <option value="c">c</option>
-        <option value="d">d</option>
+        <select id="lala" multiple=yes style="width: 40%; position: fixed; right: 5%" size="10">
         </select>
     </div>
 </div>

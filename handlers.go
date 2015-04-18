@@ -129,6 +129,13 @@ func videoHandler(w http.ResponseWriter, r *http.Request) {
 	renderTemplate(w, "footer", title)
 }
 
+func videoCreateHandler(w http.ResponseWriter, r *http.Request) {
+	title := r.URL.Path[len("/video/create"):]
+	renderTemplate(w, "header", title)
+	renderTemplate(w, "video_create", title)
+	renderTemplate(w, "footer", title)
+}
+
 func ajaxHandler(w http.ResponseWriter, r *http.Request) {
 
 	m := ajaxValidPath.FindStringSubmatch(r.URL.Path)
@@ -164,6 +171,7 @@ func ajaxHandler(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			b, err = json.Marshal(res)
+
 		} else if (m[2] != "video" && m[2] != "list") {
 			errorHandler(w, r, http.StatusNotFound)
         	return
@@ -187,8 +195,8 @@ func ajaxHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if (m[1] == "save") {
-		//pl = Playlist{m[2], r.FormValue("title")
-		//err := savePlaylist(pl)
+//		pl = Playlist{m[2], r.FormValue("title")
+//		err := savePlaylist(pl)
 		return
 	}
 }
