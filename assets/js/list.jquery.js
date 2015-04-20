@@ -6,19 +6,32 @@ $(function(){
             $('#video').append('<option>' + tmp + '</option>');
     });
 
-});
-$(function(){
+    $(document).on('change', "#plist", load_playlist);
+
 
     $.getJSON("/ajax/list").done(function(data){
         //alert(data);
         for (tmp of data)
             $('#plist').append('<option>' + tmp + '</option>');
+
+        load_playlist();
     });
 
 });
 
-$(document).on('change', "#plist", function(){
-    var end = this.value;
- //  alert(end);
-    $('#lala').empty().append('<option>' + end + '</option>');
-});
+function load_playlist()
+{
+    var pname = $("#plist option:selected").text();
+    if (pname == "")
+        return ;
+    $.getJSON("/ajax/load/" + pname).done(function(data){
+        $("#lala").empty();
+        for (tmp of data.Items)
+        {
+            $('#lala').append('<option>' + tmp + '</option>');
+        }
+    });
+}
+
+
+
