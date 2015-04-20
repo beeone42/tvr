@@ -1,17 +1,26 @@
 
 <br/>
-<div style="position:relative">    
-    <select id="plist" onselect="tt()" class="form-control" style="width: 40%; position:absolute right:0">
-    </select>
-</div>
-<br/>
-<div  style="inline-block; margin-right: auto; margin-left: auto;">
-    <div>
-        <select id="video" multiple="yes" style="width: 40%; position: fixed; left: 5%" size="10">
-        </select>
-    </div>
-    <div>
-        <select id="lala" multiple=yes style="width: 40%; position: fixed; right: 5%" size="10">
-        </select>
+
+
+<div class="container">
+  <div class="row">
+        <div class="col-md-6 col-md-offset-3  text-center">
+            <select id="plist" onselect="tt()" class="form-control" style="width: 100%; position:absolute right:0"></select>
+        </div>
+        <div class="col-md-5">
+            <div class="list-group" id="list1">
+                <select id="video" multiple="yes" size="10" style="width: 100%;"></select>
+            </div>
+        </div>
+        <div class="col-md-2 v-center">
+            <button id="playlist_add" title="Add to playlist" class="btn btn-default center-block add"><i class="glyphicon glyphicon-chevron-right"></i></button>
+            <button id="playlist_del" title="Remove from playlist" class="btn btn-default center-block remove"><i class="glyphicon glyphicon-chevron-left"></i></button>
+            <button id="playlist_save" title="Save Playlist" class="btn btn-default center-block remove">Save</button>
+        </div>
+        <div class="col-md-5">
+            <div class="list-group" id="list2">
+                <select id="lala" multiple="yes" size="10" style="width: 100%;"></select>
+            </div>
+        </div>
     </div>
 </div>

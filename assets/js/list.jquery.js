@@ -23,6 +23,31 @@ $(function(){
     if (navbar_active != "")
         $("#" + navbar_active).addClass("active");
 
+    if (navbar_active == "navbar_video")
+    {
+        $('#playlist_add').click(function(){
+            var items = $("#video option:selected");
+            var n = items.length;
+            if (n > 0) {
+                items.each(function(idx,item){
+                    $("#lala").append('<option>' + item.text + '</option>');
+                });
+            }
+            else {
+                alert("Choose an item from list 1");
+            }
+        });
+        $('#playlist_del').click(function(){
+            var items = $("#lala option:selected");
+            var n = items.length;
+            if (n > 0) {
+                items.remove()
+            }
+            else {
+                alert("Choose an item from list 1");
+            }
+        });
+    }
 });
 
 function load_playlist()
