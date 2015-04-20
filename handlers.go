@@ -74,6 +74,8 @@ func listPlaylist() ([]string, error) {
 
 	var ext string
 	for i := range res {
+		fmt.Println(res)
+		fmt.Println("ta mamaan")
 		res[i] = path.Base(res[i])
 		ext = filepath.Ext(res[i])
 		res[i] = res[i][0:len(res[i]) - len(ext)]
@@ -149,6 +151,22 @@ func videoCreateHandler(w http.ResponseWriter, r *http.Request) {
 func ajaxListHandler(w http.ResponseWriter, r *http.Request) {
 	var b []byte
 	res, err := listPlaylist()
+	if err != nil {
+		log.Println(err.Error())
+		return
+	}
+	b, err = json.Marshal(res)
+	if err != nil {
+		log.Println(err.Error())
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(b)
+}
+
+func ajaxVideoHandler(w http.ResponseWriter, r *http.Request) {
+	var b []byte
+	res, err := listVideo()
 	if err != nil {
 		log.Println(err.Error())
 		return

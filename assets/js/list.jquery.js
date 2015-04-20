@@ -1,6 +1,6 @@
 $(function(){
 
-    $.getJSON("/ajax/load/video").done(function(data){
+    $.getJSON("/ajax/video").done(function(data){
         //alert(data);
         for (tmp of data)
             $('#video').append('<option>' + tmp + '</option>');
@@ -9,7 +9,7 @@ $(function(){
 });
 $(function(){
 
-    $.getJSON("/ajax/load/list").done(function(data){
+    $.getJSON("/ajax/list").done(function(data){
         //alert(data);
         for (tmp of data)
             $('#plist').append('<option>' + tmp + '</option>');
