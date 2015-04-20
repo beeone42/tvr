@@ -6,8 +6,6 @@ import (
     "net/http"
 	"log"
 	"regexp"
-	"path"
-	"path/filepath"
 	"fmt"
 )
 
@@ -18,25 +16,6 @@ type Video struct {
 }
 
 var ajaxValidPath = regexp.MustCompile("^/ajax/(load|details|save)/([a-zA-Z0-9]+)$")
-
-
-func listVideo() ([]string, error) {
-	res, err := filepath.Glob(path.Join("video", "*.json"))
-	if err != nil {
-		log.Println(err.Error())
-		return nil, err
-	}
-	log.Println(res)
-
-	var ext string
-	for i := range res {
-		res[i] = path.Base(res[i])
-		ext = filepath.Ext(res[i])
-		res[i] = res[i][0:len(res[i]) - len(ext)]
-	}
-	return res, nil
-}
-
 
 func renderTemplate(w http.ResponseWriter, tmpl string, title string) {
     t, err := template.ParseFiles("views/" + tmpl + ".html")
