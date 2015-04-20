@@ -1,6 +1,9 @@
+
+d = new Date();
+
 $(function(){
 
-    $.getJSON("/ajax/video").done(function(data){
+    $.getJSON("/ajax/video/", { t: d.getTime() }).done(function(data){
         //alert(data);
         for (tmp of data)
             $('#video').append('<option>' + tmp + '</option>');
@@ -9,13 +12,16 @@ $(function(){
     $(document).on('change', "#plist", load_playlist);
 
 
-    $.getJSON("/ajax/list").done(function(data){
+    $.getJSON("/ajax/list/", { t: d.getTime() }).done(function(data){
         //alert(data);
         for (tmp of data)
             $('#plist').append('<option>' + tmp + '</option>');
 
         load_playlist();
     });
+
+    if (navbar_active != "")
+        $("#" + navbar_active).addClass("active");
 
 });
 
@@ -24,7 +30,8 @@ function load_playlist()
     var pname = $("#plist option:selected").text();
     if (pname == "")
         return ;
-    $.getJSON("/ajax/load/" + pname).done(function(data){
+
+    $.getJSON("/ajax/load/" + pname, { t: d.getTime() }).done(function(data){
         $("#lala").empty();
         for (tmp of data.Items)
         {

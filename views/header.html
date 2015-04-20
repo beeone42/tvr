@@ -8,10 +8,9 @@
 <script src="/assets/js/list.jquery.js"></script>
 <link rel="stylesheet" href="/assets/css/style.css">
 
-
 <style> 
    .quote_size {font-size: 1px;}
-   </style>
+</style>
 </head>
 <body>
      <!-- <div class="container"> -->
@@ -30,10 +29,13 @@
             <div id="navbarCollapse" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
                <!--     <li class="active"><a href="/"><span class="glyphicon glyphicon-home"></span>  Home</a></li> -->
-                        <li class="active"><a href="/video"><span class="glyphicon glyphicon-facetime-video"></span> Edit Playlist</a></li>
-                        <li class="active"><a href="/video/create"><span class="glyphicon glyphicon-facetime-video"></span> Create Playlist</a></li>
-                        <li class="active"><a href="/video/upload"><span class="glyphicon glyphicon-facetime-video"></span> Upload Video</a></li>
+                        <li id="navbar_video"><a href="/video"><span class="glyphicon glyphicon-facetime-video"></span> Edit Playlist</a></li>
+                        <li id="navbar_video_create"><a href="/video/create"><span class="glyphicon glyphicon-facetime-video"></span> Create Playlist</a></li>
+                        <li id="navbar_video_upload"><a href="/video/upload"><span class="glyphicon glyphicon-facetime-video"></span> Upload Video</a></li>
                 </ul>
             </div>
         </nav>
   <!--  </div> -->
+  <script>
+var navbar_active = '{{.}}';
+  </script>

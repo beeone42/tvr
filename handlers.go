@@ -10,6 +10,7 @@ import (
 	"os"
 	"io"
 	"path"
+	"strings"
 )
 
 
@@ -41,21 +42,40 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 
 func videoHandler(w http.ResponseWriter, r *http.Request) {
 	title := r.URL.Path[len("/video"):]
-	renderTemplate(w, "header", title)
+	renderTemplate(w, "header", "navbar_video")
 	renderTemplate(w, "video", title)
 	renderTemplate(w, "footer", title)
 }
 
 func videoCreateHandler(w http.ResponseWriter, r *http.Request) {
 	title := r.URL.Path[len("/video/create"):]
-	renderTemplate(w, "header", title)
+	renderTemplate(w, "header", "navbar_video_create")
 	renderTemplate(w, "video_create", title)
 	renderTemplate(w, "footer", title)
 }
 
+func videoCreateExecuteHandler(w http.ResponseWriter, r *http.Request) {
+	var pl Playlist
+
+	log.Println("videoCreateExecute")
+	r.ParseForm()
+	pl.Name = strings.Join(r.Form["inputName"], "")
+	pl.Id = pl.Name
+	pl.Author = strings.Join(r.Form["inputAuthor"], "")
+
+	log.Println("id=", pl.Id)
+	log.Println("name=", pl.Name)
+	log.Println("author=", pl.Author)
+
+	savePlaylist(pl)
+
+    http.Redirect(w, r, "/video", http.StatusFound)
+	w.Write([]byte("ok"))
+}
+
 func videoUploadHandler(w http.ResponseWriter, r *http.Request) {
 	title := r.URL.Path[len("/video/upload"):]
-	renderTemplate(w, "header", title)
+	renderTemplate(w, "header", "navbar_video_upload")
 	renderTemplate(w, "video_upload", title)
 	renderTemplate(w, "footer", title)
 }
