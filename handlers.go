@@ -15,6 +15,7 @@ import (
 type Playlist struct {
 	Id	string
 	Name  string
+	Author string
 	Items []string
 }
 
@@ -23,37 +24,7 @@ type Video struct {
 	Name string
 }
 
-var ajaxValidPath = regexp.MustCompile("^/ajax/(load|save)/([a-zA-Z0-9]+).*")
-
-
-// TEST
-
-/*
-func lala() ([]string, error) {
-	res, err:=  filepath.Glob(path.Join("playlist", "*.json"))
-			if err != nil {
-		log.Println(err.Error())
-		return nil, err
-			}
-	fmt.Printf("coucou\n")
-	log.Println(res)
- 	fd, err := ioutil.ReadFile(res[0])
-    if err != nil {
-        panic(err)
-    }
-    fmt.Printf(string(fd))
-	fd, err = json.Marshal(fd)
-	return res, nil
-}
-
-*/
-
-// FIN DES TEST
-
-
-
-
-
+var ajaxValidPath = regexp.MustCompile("^/ajax/(load|details|save)/([a-zA-Z0-9]+)$")
 
 
 func listVideo() ([]string, error) {
@@ -110,7 +81,6 @@ func listPlaylist() ([]string, error) {
 
 	return res, nil
 }
-/*
 
 func loadPlaylist(id string) (*Playlist, error) {
 	var pl Playlist
@@ -127,7 +97,7 @@ func loadPlaylist(id string) (*Playlist, error) {
     }
     return &pl, nil
 }
-*/
+
 /*
 func loadPlaylistDetails(id string) (*Playlist, error) {
 
@@ -175,7 +145,24 @@ func videoCreateHandler(w http.ResponseWriter, r *http.Request) {
 	renderTemplate(w, "footer", title)
 }
 
-func ajaxHandler(w http.ResponseWriter, r *http.Request) {
+
+func ajaxListHandler(w http.ResponseWriter, r *http.Request) {
+	var b []byte
+	res, err := listPlaylist()
+	if err != nil {
+		log.Println(err.Error())
+		return
+	}
+	b, err = json.Marshal(res)
+	if err != nil {
+		log.Println(err.Error())
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(b)
+}
+
+func ajaxLoadHandler(w http.ResponseWriter, r *http.Request) {
 	m := ajaxValidPath.FindStringSubmatch(r.URL.Path)
 	if m == nil {
 		http.NotFound(w, r)
@@ -183,69 +170,18 @@ func ajaxHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	if (m[1] == "load") {
 		var b []byte
-		var err error
-		if (m[2] == "list" && len(m) == 3) {
-			log.Println(string(len(m)))
-			res, err := listPlaylist()
-			if err != nil {
-				log.Println(err.Error())
-				return
-			}
-		b, err = json.Marshal(res)
-/*
-		} else {
-
-			res, err := loadPlaylist(m[2])
-			if err != nil {
-				log.Println(err.Error())
-				return
-			}
-			b, err = json.Marshal(res)
-*/
-		} else if (m[2] == "list" && m[3] == "details") {
-			res, err := listPlaylistDetails()
-			if err != nil {
-				log.Println(err.Error())
-				return
-			}
-
-			b, err = json.Marshal(res)
-			log.Println(string(res[0]))
-
-		} else if (m[2] == "video") {
-			res, err := listVideo()
-			if err != nil {
-				
-				return
-			}
-			b, err = json.Marshal(res)
-
-		} else if (m[2] != "video" && m[2] != "list") {
-			errorHandler(w, r, http.StatusNotFound)
-        	return
+		res, err := loadPlaylist(m[2])
+		if err != nil {
+			log.Println(err.Error())
+			return
 		}
-
-	//	} else {
-	//		res, err := loadPlaylist(m[2])
-	//		if err != nil {
-	//			log.Println(err.Error())
-	//			return
-	//		}
-	//		b, err = json.Marshal(res)
-	//	}
-
+		b, err = json.Marshal(res)
 		if err != nil {
 			log.Println(err.Error())
 			return
 		}
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(b)
-		return
-	}
-	if (m[1] == "save") {
-//		pl = Playlist{m[2], r.FormValue("title")
-//		err := savePlaylist(pl)
-		return
 	}
 }
 
