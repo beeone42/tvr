@@ -7,6 +7,9 @@ import (
 	"log"
 	"regexp"
 	"fmt"
+	"os"
+	"io"
+	"path"
 )
 
 
@@ -50,6 +53,36 @@ func videoCreateHandler(w http.ResponseWriter, r *http.Request) {
 	renderTemplate(w, "footer", title)
 }
 
+func videoUploadHandler(w http.ResponseWriter, r *http.Request) {
+	title := r.URL.Path[len("/video/upload"):]
+	renderTemplate(w, "header", title)
+	renderTemplate(w, "video_upload", title)
+	renderTemplate(w, "footer", title)
+}
+
+func videoUploadReceiveHandler(w http.ResponseWriter, r *http.Request) {
+         file, header, err := r.FormFile("file")
+         if err != nil {
+                 log.Println(err)
+                 return
+         }
+         defer file.Close()
+         out, err := os.Create(path.Join("video", header.Filename))
+         if err != nil {
+                 log.Println("Unable to create the file for writing. Check your write access privilege")
+                 return
+         }
+         defer out.Close()
+         // write the content from POST to the file
+         _, err = io.Copy(out, file)
+         if err != nil {
+                 log.Println(err)
+         }
+
+         log.Println( "File uploaded successfully : ")
+         log.Println( header.Filename)
+         http.Redirect(w, r, "/ajax/upload/ok", http.StatusFound)
+}
 
 func ajaxListHandler(w http.ResponseWriter, r *http.Request) {
 	var b []byte

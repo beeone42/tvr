@@ -8,6 +8,8 @@ func main() {
 	http.HandleFunc("/", mainHandler)
 	http.HandleFunc("/video", videoHandler)
 	http.HandleFunc("/video/create", videoCreateHandler)
+	http.HandleFunc("/video/upload", videoUploadHandler)
+	http.HandleFunc("/video/upload/receive", videoUploadReceiveHandler)
 	http.HandleFunc("/ajax/list/", ajaxListHandler) // la liste des playlists
 	http.HandleFunc("/ajax/video/", ajaxVideoHandler) // la liste des videos
 	http.HandleFunc("/ajax/load/", ajaxLoadHandler) // le contenu d'une playlist
