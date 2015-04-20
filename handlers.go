@@ -23,7 +23,7 @@ type Video struct {
 	Name string
 }
 
-var ajaxValidPath = regexp.MustCompile("^/ajax/(load|save)/([a-zA-Z0-9]+)/(details)$")
+var ajaxValidPath = regexp.MustCompile("^/ajax/(load|save)/([a-zA-Z0-9]+).*")
 
 
 // TEST
@@ -111,22 +111,6 @@ func listPlaylist() ([]string, error) {
 	return res, nil
 }
 /*
-func loadVideo(id string) (*Video, error) {
-	var pl Video
-    filename := path.Join("video", id + ".json")
-    body, err := ioutil.ReadFile(filename)
-    if err != nil {
-		log.Println(err.Error())
-        return nil, err
-    }
-	err = json.Unmarshal(body, &pl)
-    if err != nil {
-		log.Println(err.Error())
-        return nil, err
-    }
-    return &pl, nil
-}
-
 
 func loadPlaylist(id string) (*Playlist, error) {
 	var pl Playlist
@@ -192,7 +176,6 @@ func videoCreateHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func ajaxHandler(w http.ResponseWriter, r *http.Request) {
-	lala()
 	m := ajaxValidPath.FindStringSubmatch(r.URL.Path)
 	if m == nil {
 		http.NotFound(w, r)
@@ -271,8 +254,4 @@ func errorHandler(w http.ResponseWriter, r *http.Request, status int) {
     if status == http.StatusNotFound {
         fmt.Fprint(w, "custom 404")
     }
-}
-
-func lala() {
-	log.Println("lalalaalalala)")
 }

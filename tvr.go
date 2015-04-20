@@ -5,7 +5,6 @@ import (
 )
 
 func main() {
-//	lala()
 	http.HandleFunc("/", mainHandler)
 	http.HandleFunc("/video", videoHandler)
 	http.HandleFunc("/video/create", videoCreateHandler)
