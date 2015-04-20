@@ -15,11 +15,8 @@ func listVideo() ([]string, error) {
 	}
 	log.Println(res)
 
-	var ext string
 	for i := range res {
 		res[i] = path.Base(res[i])
-		ext = filepath.Ext(res[i])
-		res[i] = res[i][0:len(res[i]) - len(ext)]
 	}
 	return res, nil
 }
