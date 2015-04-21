@@ -1,11 +1,12 @@
 
 <br/>
 
+<form id='video_edit' method='GET' action='/video/execute'>
 
 <div class="container">
   <div class="row">
         <div class="col-md-6 col-md-offset-3  text-center">
-            <select id="plist" onselect="tt()" class="form-control" style="width: 100%; position:absolute right:0"></select>
+            <select id="plist" name="id" onselect="tt()" class="form-control" style="width: 100%; position:absolute right:0"></select>
         </div>
         <div class="col-md-5">
             <div class="list-group" id="list1">
@@ -19,8 +20,10 @@
         </div>
         <div class="col-md-5">
             <div class="list-group" id="list2">
-                <select id="lala" multiple="yes" size="10" style="width: 100%;"></select>
+                <select id="lala" name="items" multiple="yes" size="10" style="width: 100%;"></select>
             </div>
         </div>
     </div>
 </div>
+
+</form>

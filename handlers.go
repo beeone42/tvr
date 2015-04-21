@@ -20,6 +20,7 @@ type Video struct {
 }
 
 var ajaxValidPath = regexp.MustCompile("^/ajax/(load|details|save)/([a-zA-Z0-9]+)$")
+var ajaxValidPublishPath = regexp.MustCompile("^/ajax/publish/(left|right)/([a-zA-Z0-9]+)$")
 
 func renderTemplate(w http.ResponseWriter, tmpl string, title string) {
     t, err := template.ParseFiles("views/" + tmpl + ".html")
@@ -35,7 +36,7 @@ func renderTemplate(w http.ResponseWriter, tmpl string, title string) {
 
 func mainHandler(w http.ResponseWriter, r *http.Request) {
     title := r.URL.Path[len("/"):]
-	renderTemplate(w, "header", title)
+	renderTemplate(w, "header", "main")
 	renderTemplate(w, "main", title)
 	renderTemplate(w, "footer", title)
 }
@@ -45,6 +46,27 @@ func videoHandler(w http.ResponseWriter, r *http.Request) {
 	renderTemplate(w, "header", "navbar_video")
 	renderTemplate(w, "video", title)
 	renderTemplate(w, "footer", title)
+}
+
+func videoExecuteHandler(w http.ResponseWriter, r *http.Request) {
+	log.Println("videoExecuteHandler")
+	r.ParseForm()
+
+	id := strings.Join(r.Form["id"], "")
+    pl, err := loadPlaylist(id)
+    if err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+    }
+
+	log.Println("id=", pl.Id)
+	log.Println("name=", pl.Name)
+	log.Println("author=", pl.Author)
+
+    pl.Items = r.Form["items"]
+    savePlaylist(*pl)
+
+    http.Redirect(w, r, "/video", http.StatusFound)
+	w.Write([]byte("ok"))
 }
 
 func videoCreateHandler(w http.ResponseWriter, r *http.Request) {
@@ -135,6 +157,18 @@ func ajaxVideoHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(b)
 }
+
+func ajaxPublishHandler(w http.ResponseWriter, r *http.Request) {
+	m := ajaxValidPublishPath.FindStringSubmatch(r.URL.Path)
+	if m == nil {
+		http.NotFound(w, r)
+		return
+	}
+	cmd := "scripts/publish_" + m[1] + ".py " + m[2];
+	log.Println(cmd)
+	w.Write([]byte("ok"))
+}
+
 
 func ajaxLoadHandler(w http.ResponseWriter, r *http.Request) {
 	m := ajaxValidPath.FindStringSubmatch(r.URL.Path)

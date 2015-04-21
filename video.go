@@ -8,7 +8,7 @@ import (
 
 
 func listVideo() ([]string, error) {
-	res, err := filepath.Glob(path.Join("video", "*.mp4, *.MP4"))
+	res, err := filepath.Glob(path.Join("video", "*.mp4"))
 	if err != nil {
 		log.Println(err.Error())
 		return nil, err
