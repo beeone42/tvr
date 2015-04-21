@@ -25,7 +25,8 @@ $(function(){
 
     if (navbar_active == "navbar_video")
     {
-        $('#playlist_add').click(function(){
+        $('#playlist_add').click(function(event){
+            event.preventDefault();
             var items = $("#video option:selected");
             var n = items.length;
             if (n > 0) {
@@ -37,7 +38,8 @@ $(function(){
                 alert("Choose an item from list 1");
             }
         });
-        $('#playlist_del').click(function(){
+        $('#playlist_del').click(function(event){
+            event.preventDefault();
             var items = $("#lala option:selected");
             var n = items.length;
             if (n > 0) {
@@ -46,6 +48,10 @@ $(function(){
             else {
                 alert("Choose an item from list 1");
             }
+        });
+        $('#playlist_save').click(function(){
+            $("#lala option").prop('selected', true);
+            alert($('form').serialize());
         });
     }
 });

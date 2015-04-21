@@ -5,7 +5,6 @@ import (
 	"path/filepath"
 	"log"
 	"io/ioutil"
-	"fmt"
 	"encoding/json"
 )
 
@@ -47,8 +46,6 @@ func listPlaylist() ([]string, error) {
 
 	var ext string
 	for i := range res {
-		fmt.Println(res)
-		fmt.Println("ta mamaan")
 		res[i] = path.Base(res[i])
 		ext = filepath.Ext(res[i])
 		res[i] = res[i][0:len(res[i]) - len(ext)]

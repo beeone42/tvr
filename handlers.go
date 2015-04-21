@@ -47,6 +47,29 @@ func videoHandler(w http.ResponseWriter, r *http.Request) {
 	renderTemplate(w, "footer", title)
 }
 
+func videoExecuteHandler(w http.ResponseWriter, r *http.Request) {
+	log.Println("videoExecuteHandler")
+	r.ParseForm()
+
+	id := strings.Join(r.Form["id"], "")
+	log.Println("form id=", id)
+
+    pl, err := loadPlaylist(id)
+
+    if err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+    }
+
+	log.Println("id=", pl.Id)
+	log.Println("name=", pl.Name)
+	log.Println("author=", pl.Author)
+
+    pl.Items = r.Form["items"]
+    savePlaylist(*pl)
+
+	w.Write([]byte("ok"))
+}
+
 func videoCreateHandler(w http.ResponseWriter, r *http.Request) {
 	title := r.URL.Path[len("/video/create"):]
 	renderTemplate(w, "header", "navbar_video_create")
