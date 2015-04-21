@@ -1,7 +1,8 @@
 
-d = new Date();
 
 $(function(){
+
+    d = new Date();
 
     $.getJSON("/ajax/video/", { t: d.getTime() }).done(function(data){
         //alert(data);
@@ -22,6 +23,16 @@ $(function(){
 
     if (navbar_active != "")
         $("#" + navbar_active).addClass("active");
+
+    if (navbar_active == "main")
+    {
+        $('#publish_left').click(function (){
+            publish_playlist("left");
+        });       
+        $('#publish_right').click(function (){
+            publish_playlist("right");
+        });
+    }
 
     if (navbar_active == "navbar_video")
     {
@@ -51,13 +62,30 @@ $(function(){
         });
         $('#playlist_save').click(function(){
             $("#lala option").prop('selected', true);
-            alert($('form').serialize());
         });
     }
 });
 
+function publish_playlist(tv)
+{
+    d = new Date();
+    var items = $("#plist option:selected");
+
+    if (items.length == 1)
+    {
+        //alert("publish playlist " + items[0].text + " on tv " + tv);
+        $.get("/ajax/publish/" + tv + "/" + items[0].text, { t: d.getTime() });
+    }
+    else
+    {
+        alert("Select a playlist on the left first !");
+    }
+}
+
+
 function load_playlist()
 {
+    d = new Date();
     var pname = $("#plist option:selected").text();
     if (pname == "")
         return ;
@@ -70,6 +98,3 @@ function load_playlist()
         }
     });
 }
-
-
-
