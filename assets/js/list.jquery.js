@@ -1,9 +1,11 @@
 
 
+var tv_side = "left";
+
+
 $(function(){
 
     d = new Date();
-    var tv_side = "left";
 
     $.getJSON("/ajax/video/", { t: d.getTime() }).done(function(data){
         //alert(data);
@@ -30,10 +32,12 @@ $(function(){
         $('#tv_left').click(function (){
             tv_side = "left";
             $(".side").html(tv_side);
+            update_datas();
         });       
         $('#tv_right').click(function (){
             tv_side = "right";
             $(".side").html(tv_side);
+            update_datas();
         });
         $('#publish').click(function (){
             publish_playlist(tv_side);
@@ -71,7 +75,27 @@ $(function(){
         });
     }
 
+    //setInterval(function() { update_datas() }, 1000);
+
 });
+
+function update_datas()
+{
+    d = new Date();
+    $('#slist').empty();
+    $.getJSON("/ajax/state/" + tv_side, { t: d.getTime() }).done( function (data) {
+
+        if (data.result.items && (data.result.items.length > 0))
+        {
+            $('#slist').empty();
+            //alert(data.result.items[0].label);
+            for (item of data.result.items)
+            {
+                $('#slist').append('<option>' + item.label + '</option>');
+            }
+        }
+    });
+}
 
 function publish_playlist(tv)
 {

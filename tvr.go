@@ -16,6 +16,7 @@ func main() {
 	http.HandleFunc("/ajax/video/", ajaxVideoHandler)		// la liste des videos
 	http.HandleFunc("/ajax/load/", ajaxLoadHandler)			// le contenu d'une playlist
 	http.HandleFunc("/ajax/publish/", ajaxPublishHandler)	// publie une playlist sur une tele
+	http.HandleFunc("/ajax/state/", ajaxStateHandler)		// recupere le status courant sur une tele
 //	http.HandleFunc("/ajax/save/", ajaxSaveHandler)			// sauver une playlist
 	http.ListenAndServe("127.0.0.1:3000", nil)
 }
