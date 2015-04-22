@@ -14,6 +14,7 @@ import (
 	"path"
 	"strings"
 	"strconv"
+	"os/exec"
 )
 
 
@@ -181,6 +182,12 @@ func ajaxPublishHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	cmd := "scripts/publish_" + m[1] + ".py " + m[2];
 	log.Println(cmd)
+
+	c := exec.Command("job.sh")
+	if err := c.Run(); err != nil { 
+		fmt.Println("Error: ", err)
+	}
+
 	w.Write([]byte("ok"))
 }
 
