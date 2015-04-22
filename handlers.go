@@ -13,7 +13,7 @@ import (
 	"bytes"
 	"path"
 	"strings"
-	"strconv"
+//	"strconv"
 	"os/exec"
 )
 
@@ -210,7 +210,8 @@ func ajaxStateHandler(w http.ResponseWriter, r *http.Request) {
     log.Println("URL:>", url)
 
 // {"jsonrpc": "2.0", "method": "Player.GetActivePlayers", "id": 1}
-    players_str, _ := jsonQuery(url, []byte(`{"jsonrpc": "2.0", "method": "Player.GetActivePlayers", "id": 1}`))
+
+    players_str, _ := jsonQuery(url + "?Player.GetActivePlayers", []byte(`{"jsonrpc": "2.0", "method": "Player.GetActivePlayers", "id": 1}`))
     //fmt.Println("players_str:", string(players_str))
 
 // {"id":1,"jsonrpc":"2.0","result":[{"playerid":2,"type":"picture"}]}
@@ -226,7 +227,8 @@ func ajaxStateHandler(w http.ResponseWriter, r *http.Request) {
 
 	if ((kl.Result != nil) && (len(kl.Result) > 0)) {
 		//fmt.Println("PlayerId:", kl.Result[0].PlayerId)
-	    body, _ := jsonQuery(url, []byte("{\"jsonrpc\": \"2.0\", \"method\": \"Playlist.GetItems\", \"params\": { \"properties\": [ \"runtime\" ], \"playlistid\": " + strconv.Itoa(kl.Result[0].PlayerId) + "}, \"id\": 1}"))
+	    //body, _ := jsonQuery(url + "?Playlist.GetItems", []byte("{\"jsonrpc\": \"2.0\", \"method\": \"Playlist.GetItems\", \"params\": { \"properties\": [ \"runtime\" ], \"playlistid\": " + strconv.Itoa(kl.Result[0].PlayerId) + "}, \"id\": 1}"))
+	    body, _ := jsonQuery(url + "?Playlist.GetItems", []byte(`{"jsonrpc": "2.0", "method": "Playlist.GetItems", "params": { "properties": [ "runtime" ], "playlistid": 0}, "id": 1}`))
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(body)
 	}
@@ -234,7 +236,7 @@ func ajaxStateHandler(w http.ResponseWriter, r *http.Request) {
 
 func jsonQuery(url string, jsonStr []byte) ([]byte, error) {
 
-    //fmt.Println("request JSON:", string(jsonStr))
+    fmt.Println("request JSON:", string(jsonStr))
 
     req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
     req.Header.Set("Content-Type", "application/json")
@@ -249,7 +251,7 @@ func jsonQuery(url string, jsonStr []byte) ([]byte, error) {
     //fmt.Println("response Status:", resp.Status)
     //fmt.Println("response Headers:", resp.Header)
     body, err := ioutil.ReadAll(resp.Body)
-    //fmt.Println("response Body:", string(body))
+    fmt.Println("response Body:", string(body))
     return body, nil
 }
 

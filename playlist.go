@@ -81,5 +81,5 @@ func savePlaylist(pl Playlist) (error) {
     if err != nil {
         return err
     }
-    return ioutil.WriteFile(filename, body, 0600)
+    return ioutil.WriteFile(filename, body, 0644)
 }
