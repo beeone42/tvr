@@ -180,10 +180,11 @@ func ajaxPublishHandler(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
 		return
 	}
-	cmd := "scripts/publish_" + m[1] + ".py " + m[2];
+	cmd := "scripts/publish_" + m[1] + ".py";
 	log.Println(cmd)
+	log.Println(m[2])
 
-	c := exec.Command(cmd)
+	c := exec.Command(cmd, m[2])
 	if err := c.Run(); err != nil { 
 		fmt.Println("Error: ", err)
 	}
