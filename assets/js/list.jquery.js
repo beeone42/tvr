@@ -3,6 +3,7 @@
 $(function(){
 
     d = new Date();
+    var tv_side = "left";
 
     $.getJSON("/ajax/video/", { t: d.getTime() }).done(function(data){
         //alert(data);
@@ -26,11 +27,16 @@ $(function(){
 
     if (navbar_active == "main")
     {
-        $('#publish_left').click(function (){
-            publish_playlist("left");
+        $('#tv_left').click(function (){
+            tv_side = "left";
+            $(".side").html(tv_side);
         });       
-        $('#publish_right').click(function (){
-            publish_playlist("right");
+        $('#tv_right').click(function (){
+            tv_side = "right";
+            $(".side").html(tv_side);
+        });
+        $('#publish').click(function (){
+            publish_playlist(tv_side);
         });
     }
 
@@ -64,6 +70,7 @@ $(function(){
             $("#lala option").prop('selected', true);
         });
     }
+
 });
 
 function publish_playlist(tv)
@@ -98,3 +105,12 @@ function load_playlist()
         }
     });
 }
+
+function get_status()
+{
+
+}
+
+
+
+

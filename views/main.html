@@ -1,11 +1,28 @@
 
-<div class="btn-toolbar">
-        <div class="btn-group btn-group-lg" style="margin-left: 40%; margin-right: 40%">
-            <button id="publish_left" type="button"  class="btn btn-primary"> TV left</button>
-            <button id="publish_right" type="button" class="btn btn-primary">TV right </button>
+
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3 col-md-offset-5  text-center">
+            <div class="btn-toolbar">
+                <div class="btn-group btn-group-lg">
+                    <button id="tv_left" type="button"  class="btn btn-primary"> TV left</button>
+                    <button id="tv_right" type="button" class="btn btn-primary">TV right </button>
+                </div>
+            </div>
         </div>
-</div>
-<br/>
+    </div>
+
+    <br/>
+
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4  text-center">
+            <button id="publish" type="button" class="btn btn-primary">Publish</button>
+        </div>
+    </div>
+
+    <br/>
 <!--
 <script>
 $(function(){
@@ -19,34 +36,20 @@ $(function(){
 });
 </script>
 -->
-<div  style="inline-block; margin-right: auto; margin-left: auto;">
-    <div>
-        <select id="plist" multiple="yes" style="width: 40%; position: fixed; left: 5%" size="10">
+    <div class="row">
+        <div class="col-md-4  col-md-offset-2 text-left">
+            Choose a Playlist to publish on TV <span class='side'>left</span>:<br />
+            <select id="plist" multiple="yes" style="width: 100%;" size="10"></select>
+        </div>
+        <div class="col-md-4 text-left">
+            Currently playing on TV <span class='side'>left</span>:<br />
+            <select multiple=yes style="width: 100%;" size=10>
+                <option value="a">a</option>
+                <option value="b">b</option>
+                <option value="c">c</option>
+                <option value="d">d</option>
+            </select>
+        </div>
+    </div>
 
-        </select>
-    </div>
-    <div>
-        <select multiple=yes style="width: 40%; position: fixed; right: 5%" size=10>
-        <option value="a">a</option>
-        <option value="b">b</option>
-        <option value="c">c</option>
-        <option value="d">d</option>
-        </select>
-    </div>
 </div>
-<!--
-        <br/>
-		<button type="button" class="btn btn-primary" data-toggle="button">Add <span class="glyphicon glyphicon-plus"></span></button>
-		<br/>
-		<button type="button" class="btn btn-primary" data-toggle="button">Remove <span class="glyphicon glyphicon-minus"></span></button>
-        <br/>
-		<a href="#">
-		<span class="glyphicon glyphicon-forward"></span>
-        </a>
-		<br/>
-		<a href="#">
-		<span class="glyphicon glyphicon-backward"></span>
-        </a>
-        <br/>
-		<button type="button" class="btn btn-primary" data-toggle="button">Commit <span class=" glyphicon glyphicon-ok"></span></button>
-        -->
