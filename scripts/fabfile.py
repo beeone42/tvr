@@ -44,19 +44,19 @@ def transfer():
         put('all.m3u', '/storage/videos')
     else:
         print 'no all.m3u detected'
-'''
-    with quiet():
-        os.chdir("../video")
-        os.system('pwd')
-        os.system('ls')
-        if os.path.isfile(glob.glob('*.avi')):
-            put('*avi', '/storage/videos')
-        else:
-            print 'no avi detected'
-        os.system('pwd')
-        if os.path.isfile('*.AVI'):
-'''            
 
+def reconf():
+    address = "/root/go/src/github.com/beeone42/tvr/tmp/autostart.sh"
+    with cd('.config/'):
+        run ('ls autostart.sh')
+        run ('rm autostart.sh')
+    os.chdir("../tmp")
+    os.system("touch autostart.sh")
+    file = open(address, 'r+')
+    file.write("#!/bin/sh\n(\nsleep 10 ;\nkodi-send --host=127.0.0.1 -a 'PlayMedia(/storage/videos/all.m3u)' ;\nkodi-send --host=127.0.0.1 -a 'PlayerControl(RepeatAll)'\n\n) &\n")
+    os.system("chmod +x autostart.sh")
+    put('autostart.sh', '.config/')
+        
 def restart():
     with settings(warn_only=True):
         result = run('reboot')
@@ -68,5 +68,6 @@ def restart():
 def deploy():
     check()
     listing()
+    reconf()
     transfer()
     restart()
